@@ -10,9 +10,7 @@ const galleryRoutes = require('./routes/galleryRoute'); // Import the newsupdate
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
 
-app.use(cors(corsOptions));
 
 
 app.use('/api/user', userrouter); // Mount the user routes
