@@ -7,5 +7,9 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.4",
     "validator": "^13.11.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node server.js"
   }
 }

@@ -2,15 +2,21 @@ const { asyncErrHandler } = require('../middleware/asyncerrorHandler');
 const Seva = require('../models/sevaModel');
 const { errorHandler } = require('../Utils/errorHandler');
 
-exports.getSevas = async (req, res) => {
+exports.getSevas = asyncErrHandler(async (req, res, next) => {
+  // Check if the user is an admin (ensure your authentication/authorization middleware sets this)
+  if (req.user.role !== 'admin') {
+    return next(errorHandler(403, 'You are not authorized to access this resource'));
+  }
+
   try {
     const sevas = await Seva.find();
-    res.json(sevas);
+    res.status(200).json({ success: true, sevas });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(errorHandler(500, 'Error fetching Seva records'));
   }
-};
+});
+
+
 
 exports.createSeva = async (req, res) => {
   const { sevaname, username, phonenumber, sevadate, userId } = req.body;
@@ -56,24 +62,29 @@ exports.updateSeva = async (req, res) => {
   }
 };
 
+// Assuming that asyncErrHandler middleware is defined
 exports.deleteSeva = asyncErrHandler(async (req, res) => {
-  const sevaId = req.params.id;
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'You are not authorized to delete sevas' });
+  }
+
+  const { sevaId } = req.params;
 
   try {
     // Check if the seva with the given ID exists
-    const seva = await Seva.findById(sevaId);
-    if (!seva) {
+    const deletedSeva = await Seva.findByIdAndDelete(sevaId);
+
+    if (!deletedSeva) {
       return res.status(404).json({ error: 'Seva not found' });
     }
 
-    // Delete the seva
-    await Seva.findByIdAndDelete(sevaId);
     res.status(200).json({ success: true, message: 'Seva deleted successfully' });
   } catch (error) {
     console.error('Error deleting seva:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 exports.numberOfSevas = asyncErrHandler(async (req, res, next) => {
   const length = await Seva.countDocuments()
