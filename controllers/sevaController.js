@@ -19,13 +19,13 @@ exports.getSevas = asyncErrHandler(async (req, res, next) => {
 
 
 exports.createSeva = async (req, res) => {
-  const { sevaname, username, phonenumber, sevadate, userId } = req.body;
+  const { sevaname, username, phonenumber, sevadate, userId, rashi, nakshatra, gotra } = req.body;
 
   // Check if all required fields are present
   if (!sevaname || !username || !phonenumber || !sevadate || !userId) {
     return res.status(400).json({ error: 'All fields are required' });
   }
-  const newSeva = await Seva.create({ sevaname, username, phonenumber, sevadate: new Date(sevadate), userId });
+  const newSeva = await Seva.create({ sevaname, username, phonenumber, sevadate: new Date(sevadate), userId, rashi, nakshatra, gotra });
   res.status(200).json({ message: "form sumbmitted successfully", success: true, newSeva })
 };
 

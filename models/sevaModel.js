@@ -6,6 +6,9 @@ const sevaSchema = new mongoose.Schema({
   phonenumber: { type: Number, required: true },
   sevadate: { type: Date, required: true },
   userId: { type: String, required: true },
+  rashi: { type: String },
+  nakshatra: { type:String },
+  gotra: { type: String },
 });
 
 const Seva = mongoose.model('Seva', sevaSchema);
