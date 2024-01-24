@@ -100,25 +100,26 @@ exports.getSingleSeva = asyncErrHandler(async (req, res, next) => {
   res.status(200).json({ message: "Seva found successfully", seva })
 })
 
-exports.getSevaByUserId = asyncErrHandler(async (req, res, next) => {
+exports.getSevaByUserId = async (req, res, next) => {
   const { userId } = req.params;
-  console.log(userId)
+
   try {
-    const sevas = await Seva.find({ userId });  // Using userId directly in the query
+    // Check if there are Sevas with the provided userId
+    const sevas = await Seva.find({ userId });
+
     if (sevas.length > 0) {
-      // Documents matching the userId were found
+      // If Sevas are found, send them in the response
       console.log(sevas);
       res.status(200).json({ message: "Sevas found successfully", sevas });
     } else {
-      // No documents found for the specified userId
+      // If no Sevas are found, return a 404 error
       return next(errorHandler(404, "Sevas not found for the given user"));
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-});
-
+};
 
 
 // exports.deleteSeva = asyncErrHandler(async (req, res, next) => {

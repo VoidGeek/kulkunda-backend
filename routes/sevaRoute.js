@@ -11,7 +11,7 @@ router.put('/:id',isAuthenticated, authorizeRoles('admin'), sevaController.updat
 router.get('/admin/noofsevas',isAuthenticated, authorizeRoles('admin'), sevaController.numberOfSevas);
 router.post('/admin/singleseva',isAuthenticated, authorizeRoles('admin'), sevaController.getSingleSeva);
 router.post('/admin/deleteseva',isAuthenticated, authorizeRoles('admin'), sevaController.deleteSeva);
-router.get('/user/:userId', isAuthenticated, authorizeRoles('user'), sevaController.getSevaByUserId);
+router.get('/user/:userId', sevaController.getSevaByUserId);
 router.get('/admin/allbookedsevas',isAuthenticated, authorizeRoles('admin'), sevaController.getSevas);
 router.post('/admin/delete/:id',isAuthenticated, authorizeRoles('admin'), sevaController.deleteSeva);
 
