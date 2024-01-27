@@ -13,6 +13,7 @@ router.delete('/delete/:id', isAuthenticated, authorizeRoles('admin'), deletecon
 router.get('/admin/noofcontacts', isAuthenticated, authorizeRoles('admin'), noofcontacts);
 router.post("/admin/singlecontact",isAuthenticated,authorizeRoles("admin"), getSingleContact)
 router.post("/admin/delete",isAuthenticated,authorizeRoles("admin"), deleteContact)
+router.delete("/admin/delete/:id",isAuthenticated,authorizeRoles("admin"), deletecontact)
 
 
 

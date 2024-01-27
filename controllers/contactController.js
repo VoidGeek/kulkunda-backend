@@ -1,5 +1,5 @@
 const { asyncErrHandler } = require('../middleware/asyncerrorHandler');
-const Contact = require('../models/contactModel');
+const Contact = require('../models/contactModel').default;
 const { errorHandler } = require('../Utils/errorHandler');
 const validator = require('validator');
 
@@ -40,15 +40,17 @@ exports.getContactForms = asyncErrHandler(async (req, res, next) => {
 });
 
 // Function to delete contact by ID (accessible only by admin)
-exports.deletecontact = async (req, res, next) => {
+exports.deletecontact = async (req, res) => {
   // Check if the user is an admin (ensure your authentication/authorization middleware sets this)
   if (req.user.role !== 'admin') {
     return next(errorHandler(403, 'You are not authorized to delete contacts'));
   }
-  const  contactId  = req.params.id;
-  const contact=await Contact.findById(contactId);
-  if(!contact){
-    return (next(errorHandler(404, 'contact not found')));
+  const { contactId } = req.params.id;
+  try {
+    await Contact.findByIdAndDelete(contactId);
+    res.status(200).json({ success: true, message: 'Contact deleted successfully' });
+  } catch (error) {
+    next(errorHandler(500, 'Error deleting contact'));
   }
   await Contact.findByIdAndDelete(contactId);
   res.status(200).json({ success: true, message: 'Contact deleted successfully' });
@@ -85,7 +87,7 @@ exports.getSingleContact = asyncErrHandler(async (req, res, next) => {
 });
 
 exports.deleteContact = asyncErrHandler(async (req, res, next) => {
-  const {id}=req.body;
+  const {id}=req.query;
   const contact = await Contact.findById(id)
   if (!contact) { return next(errorHandler(404, "The contact doesnot exist")) }
   await Contact.findByIdAndDelete(id)
