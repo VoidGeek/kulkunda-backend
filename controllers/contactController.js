@@ -7,11 +7,11 @@ const validator = require('validator');
 exports.submitContactForm = asyncErrHandler(async (req, res, next) => {
   const { name, email, phoneNumber, message } = req.body;
   const isValidEmail = validator.isEmail(email);
-  
+
   if (!isValidEmail) {
     return next(errorHandler(400, "Invalid email ID"));
   }
-  
+
   try {
     // Creating a new contact using Mongoose's Contact model and its create() method
     const newContact = await Contact.create({ name, email, phoneNumber, message });
@@ -30,7 +30,6 @@ exports.getContactForms = asyncErrHandler(async (req, res, next) => {
   if (req.user.role !== 'admin') {
     return next(errorHandler(403, 'You are not authorized to access this resource'));
   }
-
   try {
     const contactForms = await Contact.find();
     res.status(200).json({ success: true, contactForms });
@@ -45,55 +44,51 @@ exports.deletecontact = async (req, res) => {
   if (req.user.role !== 'admin') {
     return next(errorHandler(403, 'You are not authorized to delete contacts'));
   }
-<<<<<<< HEAD
-  const  contactId  = req.params.id;
-  const contact=await Contact.findById(contactId)
-  if(!contact){
-    return (next(errorHandler(500, 'Error deleting contact')));
-  }
-=======
   const contactId = req.params.id;
-  try {
->>>>>>> 5b1b7dd766cad3e298068fdafda3e8a93ea1d827
+  const contact=Contact.findById(contactId)
+  if(!contact){
+    return(next(errorHandler(404,"contact not found")))
+  }
     await Contact.findByIdAndDelete(contactId);
     res.status(200).json({ success: true, message: 'Contact deleted successfully' });
-};
-exports.noofcontacts = asyncErrHandler(async (req, res, next) => {
-  const length = await Contact.countDocuments()
-  const contacts = await Contact.find()
-  if (!length) { return next(errorHandler(403, "There are no contacts in the database")) }
-  res.status(200).json({ message: "Num of contacts:", length, contacts })
-})
+  };
 
-exports.getSingleContact = asyncErrHandler(async (req, res, next) => {
-  const { _id, name, email, phoneNumber } = req.body;
-  
-  let query = {};
+  exports.noofcontacts = asyncErrHandler(async (req, res, next) => {
+    const length = await Contact.countDocuments()
+    const contacts = await Contact.find()
+    if (!length) { return next(errorHandler(403, "There are no contacts in the database")) }
+    res.status(200).json({ message: "Num of contacts:", length, contacts })
+  })
 
-  if (_id) {
-    // If _id is provided, prioritize the search by ID
-    query._id = _id;
-  } else {
-    // If _id is not provided, construct a query based on available fields
-    if (name) query.name = name;
-    if (email) query.email = email;
-    if (phoneNumber) query.phoneNumber = phoneNumber;
-  }
+  exports.getSingleContact = asyncErrHandler(async (req, res, next) => {
+    const { _id, name, email, phoneNumber } = req.body;
 
-  const contact = await Contact.findOne(query);
+    let query = {};
 
-  if (!contact) {
-    return next(errorHandler(404, "Contact not found"));
-  }
+    if (_id) {
+      // If _id is provided, prioritize the search by ID
+      query._id = _id;
+    } else {
+      // If _id is not provided, construct a query based on available fields
+      if (name) query.name = name;
+      if (email) query.email = email;
+      if (phoneNumber) query.phoneNumber = phoneNumber;
+    }
 
-  res.status(200).json({ message: "Contact found successfully", contact });
-});
+    const contact = await Contact.findOne(query);
 
-exports.deleteContact = asyncErrHandler(async (req, res, next) => {
-  const {id}=req.query;
-  const contact = await Contact.findById(id)
-  if (!contact) { return next(errorHandler(404, "The contact doesnot exist")) }
-  await Contact.findByIdAndDelete(id)
-  res.status(200).json({ success:true,message: "Contact deleted successfully" })
-})
+    if (!contact) {
+      return next(errorHandler(404, "Contact not found"));
+    }
+
+    res.status(200).json({ message: "Contact found successfully", contact });
+  });
+
+  exports.deleteContact = asyncErrHandler(async (req, res, next) => {
+    const { id } = req.query;
+    const contact = await Contact.findById(id)
+    if (!contact) { return next(errorHandler(404, "The contact doesnot exist")) }
+    await Contact.findByIdAndDelete(id)
+    res.status(200).json({ success: true, message: "Contact deleted successfully" })
+  })
 

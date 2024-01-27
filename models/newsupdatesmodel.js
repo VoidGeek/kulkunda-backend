@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-const mongoose=require("mongoose")
-=======
+
 const mongoose = require('mongoose');
->>>>>>> 5b1b7dd766cad3e298068fdafda3e8a93ea1d827
 
 const newsupdateSchema = new mongoose.Schema({
     headline: {
