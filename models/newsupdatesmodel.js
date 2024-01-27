@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const mongoose = require('mongoose');
 
 const newsupdateSchema = new Schema({
     headline: {

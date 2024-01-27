@@ -1,6 +1,6 @@
 // contactModel.js
 
-import { Schema, model } from 'mongoose';
+const mongoose = require('mongoose');
 
 // Define the schema for the contact form
 const contactSchema = new Schema({
