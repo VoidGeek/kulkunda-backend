@@ -13,6 +13,6 @@ router.post('/admin/singleseva',isAuthenticated, authorizeRoles('admin'), sevaCo
 router.post('/admin/deleteseva',isAuthenticated, authorizeRoles('admin'), sevaController.deleteSeva);
 router.get('/user/:userId', sevaController.getSevaByUserId);
 router.get('/admin/allbookedsevas',isAuthenticated, authorizeRoles('admin'), sevaController.getSevas);
-router.post('/admin/delete/:id',isAuthenticated, authorizeRoles('admin'), sevaController.deleteSeva);
+router.delete('/admin/delete/:id',isAuthenticated, authorizeRoles('admin'), sevaController.deleteSeva);
 
 module.exports = router;

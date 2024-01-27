@@ -66,16 +66,12 @@ exports.deleteSeva = asyncErrHandler(async (req, res) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ error: 'You are not authorized to delete sevas' });
   }
-
   const { sevaId } = req.params;
-
   try {
     const deletedSeva = await Seva.findByIdAndDelete(sevaId);
-
     if (!deletedSeva) {
       return res.status(404).json({ error: 'Seva not found' });
     }
-
     res.status(200).json({ success: true, message: 'Seva deleted successfully' });
   } catch (error) {
     console.error('Error deleting seva:', error);
