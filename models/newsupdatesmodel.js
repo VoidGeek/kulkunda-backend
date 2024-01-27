@@ -1,6 +1,6 @@
-import { Schema, model } from "mongoose";
+const mongoose=require("mongoose")
 
-const newsupdateSchema = new Schema({
+const newsupdateSchema = new mongoose.Schema({
     headline: {
         type: String,
         required: true,
@@ -21,6 +21,6 @@ const newsupdateSchema = new Schema({
     },
 });
 
-const NewsUpdates = model('NewsUpdates', newsupdateSchema);
+const NewsUpdates = mongoose.model('NewsUpdates', newsupdateSchema);
   
-export default NewsUpdates;
+module.exports=NewsUpdates;

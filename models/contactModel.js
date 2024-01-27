@@ -1,9 +1,9 @@
 // contactModel.js
 
-import { Schema, model } from 'mongoose';
+const mongoose=require("mongoose")
 
 // Define the schema for the contact form
-const contactSchema = new Schema({
+const contactSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -25,6 +25,6 @@ const contactSchema = new Schema({
 });
 
 // Create a model using the schema
-const Contact = model('Contact', contactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 
-export default Contact;
+module.exports=Contact;

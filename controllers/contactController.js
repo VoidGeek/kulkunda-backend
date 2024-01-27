@@ -1,5 +1,5 @@
 const { asyncErrHandler } = require('../middleware/asyncerrorHandler');
-const Contact = require('../models/contactModel').default;
+const Contact = require('../models/contactModel');
 const { errorHandler } = require('../Utils/errorHandler');
 const validator = require('validator');
 
@@ -45,15 +45,13 @@ exports.deletecontact = async (req, res) => {
   if (req.user.role !== 'admin') {
     return next(errorHandler(403, 'You are not authorized to delete contacts'));
   }
-  const { contactId } = req.params.id;
-  try {
+  const  contactId  = req.params.id;
+  const contact=await Contact.findById(contactId)
+  if(!contact){
+    return (next(errorHandler(500, 'Error deleting contact')));
+  }
     await Contact.findByIdAndDelete(contactId);
     res.status(200).json({ success: true, message: 'Contact deleted successfully' });
-  } catch (error) {
-    next(errorHandler(500, 'Error deleting contact'));
-  }
-  await Contact.findByIdAndDelete(contactId);
-  res.status(200).json({ success: true, message: 'Contact deleted successfully' });
 };
 exports.noofcontacts = asyncErrHandler(async (req, res, next) => {
   const length = await Contact.countDocuments()
