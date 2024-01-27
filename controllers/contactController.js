@@ -45,8 +45,7 @@ exports.deletecontact = async (req, res) => {
   if (req.user.role !== 'admin') {
     return next(errorHandler(403, 'You are not authorized to delete contacts'));
   }
-
-  const {contactId}  = req.query;
+  const { contactId } = req.params.id;
   try {
     const deletedContact = await Contact.findByIdAndDelete(contactId);
 
