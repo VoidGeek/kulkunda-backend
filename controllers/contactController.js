@@ -47,15 +47,13 @@ exports.deletecontact = async (req, res) => {
   }
   const contactId = req.params.id;
   try {
-    const deletedContact = await Contact.findByIdAndDelete(contactId);
-
-    if (!deletedContact) {
-      throw new Error('Contact not found');
-    }
+    await Contact.findByIdAndDelete(contactId);
     res.status(200).json({ success: true, message: 'Contact deleted successfully' });
   } catch (error) {
     next(errorHandler(500, 'Error deleting contact'));
   }
+  await Contact.findByIdAndDelete(contactId);
+  res.status(200).json({ success: true, message: 'Contact deleted successfully' });
 };
 exports.noofcontacts = asyncErrHandler(async (req, res, next) => {
   const length = await Contact.countDocuments()
