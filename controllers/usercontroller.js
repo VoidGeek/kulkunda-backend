@@ -141,5 +141,3 @@ exports.checkcookies=asyncErrHandler(async(req,res,next)=>{
     if(!yourCookie){return next(errorHandler(400,"No cookie"))}
     res.status(200).json({message:"cookie found successfully",success:true,yourCookie})
 })
-
-//hi
