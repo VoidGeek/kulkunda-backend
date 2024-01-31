@@ -12,8 +12,9 @@ exports.register = asyncErrHandler(async (req, res, next) => {
     const afterAtSymbol = email.split('@')[1];
     if (afterAtSymbol === "kulkundabasaweshwara.com") { role = "admin" }
     else { role = "user" }
+    const sanitizedPhoneNumber = phonenumber.startsWith('+91 ') ? phonenumber.slice(4) : phonenumber;
     const newpassword = bcrypt.hashSync(password, 10)
-    const user = await User.create({ name, email, password: newpassword, role, phonenumber })
+    const user = await User.create({ name, email, password: newpassword, role, phonenumber:sanitizedPhoneNumber })
     if (!user) { return next(errorHandler(400, "User isn't created")) }
     res.status(200).json({ success: true, user })
 })
@@ -21,7 +22,9 @@ exports.register = asyncErrHandler(async (req, res, next) => {
 
 exports.login = asyncErrHandler(async (req, res, next) => {
     const { phonenumber, password } = req.body;
-    const user = await User.findOne({ phonenumber }).select('+password');
+    const sanitizedPhoneNumber = phonenumber.startsWith('+91 ') ? phonenumber.slice(4) : phonenumber;
+    console.log(sanitizedPhoneNumber)
+    const user = await User.findOne( {phonenumber:sanitizedPhoneNumber} ).select('+password');
     if (!user) {
         return next(errorHandler(404, 'User not found'));
     }
@@ -29,6 +32,7 @@ exports.login = asyncErrHandler(async (req, res, next) => {
     if (!validPassword) {
         return next(errorHandler(400, 'Wrong password, try again'));
     }
+
     // Create a JWT for the user with a 5-day expiration
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 * expiresInDays });
     // Exclude sensitive information from the response
