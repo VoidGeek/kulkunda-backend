@@ -22,20 +22,18 @@ class TwilioController {
   static async checkVerification(req, res) {
     const phonenumber = req.body.phonenumber;
     const otp = req.body.otp;
-
     // Check if both phoneNumber and otpCode are present in the request body
     if (!phonenumber || !otp) {
       return res.status(400).json({ error: "Both phone number and OTP code are required in the request body." });
     }
-
+    console.log(req.body)
     try {
       const status = await TwilioService.checkVerificationCode(phonenumber, otp);
-
+      console.log(status)
       // Check if the OTP is invalid
       if (status === "invalid") {
         return res.status(400).json({ error: "Invalid OTP code." });
       }
-
       res.json({ status });
     } catch (error) {
       console.error(error);
