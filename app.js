@@ -8,6 +8,7 @@ const sevaRoutes = require('./routes/sevaRoute');
 const sevalistRoutes = require('./routes/sevalistroute');
 const newsupdateRoutes = require('./routes/newsupdatesroute');
 const galleryRoutes = require('./routes/galleryRoute');
+const twilioRoutes = require('./routes/twilioRoute.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -27,6 +28,7 @@ app.use('/api/seva', sevaRoutes);
 app.use('/api/sevalist', sevalistRoutes);
 app.use('/api/newsupdate', newsupdateRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/otp',twilioRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
