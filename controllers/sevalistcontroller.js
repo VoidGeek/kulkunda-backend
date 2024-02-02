@@ -89,7 +89,7 @@ exports.UpdateSeva = asyncErrHandler(async (req, res, next) => {
 });
 exports.getSingleSeva = asyncErrHandler(async (req, res, next) => {
     const { _id, sevanamee, sevanamek, sevanameh, price } = req.body;
-    
+  
     let query = {};
   
     // If _id is provided, prioritize the search by ID
@@ -97,20 +97,24 @@ exports.getSingleSeva = asyncErrHandler(async (req, res, next) => {
       query._id = _id;
     } else {
       // If _id is not provided, construct a query based on other available fields
-      if (sevanamee) query.sevanamee = sevanamee;
-      if (sevanamek) query.sevanamek = sevanamek;
-      if (sevanameh) query.sevanameh = sevanameh;
-      if (price) query.price = price;
+  
+      if (sevanamee) query.sevanamee = new RegExp(`.*${sevanamee}.*`, 'i');
+      if (sevanamek) query.sevanamek = new RegExp(`.*${sevanamek}.*`, 'i');
+      if (sevanameh) query.sevanameh = new RegExp(`.*${sevanameh}.*`, 'i');
+      if (price) query.price = new RegExp(`.*${price}.*`, 'i');
     }
   
     const seva = await Sevalist.find(query);
   
-    if (!seva) {
+    if (!seva || seva.length === 0) {
       return next(errorHandler(404, "Seva not found"));
     }
   
     res.status(200).json({ message: "Seva found successfully", seva });
   });
+  
+  
+  
   exports.getSingleSevaById = asyncErrHandler(async (req, res, next) => {
     const sevaId = req.params.id;
 
