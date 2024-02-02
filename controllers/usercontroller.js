@@ -100,21 +100,33 @@ exports.numberOfUsers = asyncErrHandler(async (req, res, next) => {
 })
 
 exports.forgetpass = asyncErrHandler(async (req, res, next) => {
-    const { newpassword, newconfirmpassword, phonenumber } = req.body
-    if (newpassword !== newconfirmpassword) { return next(errorHandler(400, "The password and confirmpassword should be same")) }
+    const { newpassword, newconfirmpassword, phonenumber } = req.body;
+    
+    if (newpassword !== newconfirmpassword) {
+        return next(errorHandler(400, "The password and confirmpassword should be the same"));
+    }
+
     const user = await User.findOne({ phonenumber });
+
     if (!user) {
         return next(errorHandler(404, 'User not found'));
     }
-    const upuser = await User.findByIdAndUpdate(req.params.id,
+
+    // Update the user based on phonenumber
+    const upuser = await User.findOneAndUpdate(
+        { phonenumber },
         {
             $set: {
-                password: req.body.newpassword
+                password: newpassword
             },
         },
-        { new: true })
-    res.status(200).json({ success: true, message: "Password updated sucessfully", upuser })
-})
+        { new: true }
+    );
+
+    res.status(200).json({ success: true, message: "Password updated successfully", upuser });
+});
+
+
 
 exports.getSingleUser = asyncErrHandler(async (req, res, next) => {
     const {id}=req.body;
