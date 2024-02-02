@@ -101,7 +101,7 @@ exports.getSingleSeva = asyncErrHandler(async (req, res, next) => {
       if (sevanamee) query.sevanamee = new RegExp(`.*${sevanamee}.*`, 'i');
       if (sevanamek) query.sevanamek = new RegExp(`.*${sevanamek}.*`, 'i');
       if (sevanameh) query.sevanameh = new RegExp(`.*${sevanameh}.*`, 'i');
-      if (price) query.price = new RegExp(`.*${price}.*`, 'i');
+      if (price) query.price = parseFloat(price);
     }
   
     const seva = await Sevalist.find(query);
