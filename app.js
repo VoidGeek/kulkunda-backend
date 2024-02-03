@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
+const { parse } = require('cookie');  // Import parse from next-cookies
 const userrouter = require('./routes/userrouter.js');
 const contactRoutes = require('./routes/contactRoute');
 const sevaRoutes = require('./routes/sevaRoute');
@@ -11,7 +11,6 @@ const galleryRoutes = require('./routes/galleryRoute');
 const twilioRoutes = require('./routes/twilioRoute.js');
 
 app.use(express.json());
-app.use(cookieParser());
 
 const corsOptions = {
   origin: 'http://seva.basavanamoolatemple.in', // Replace with your actual allowed origin
@@ -28,7 +27,7 @@ app.use('/api/seva', sevaRoutes);
 app.use('/api/sevalist', sevalistRoutes);
 app.use('/api/newsupdate', newsupdateRoutes);
 app.use('/api/gallery', galleryRoutes);
-app.use('/api/otp',twilioRoutes);
+app.use('/api/otp', twilioRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
