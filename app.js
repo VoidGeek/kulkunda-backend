@@ -9,7 +9,6 @@ const sevalistRoutes = require('./routes/sevalistroute');
 const newsupdateRoutes = require('./routes/newsupdatesroute');
 const galleryRoutes = require('./routes/galleryRoute');
 const twilioRoutes = require('./routes/twilioRoute.js');
-
 app.use(express.json());
 app.use(cookieParser());
 

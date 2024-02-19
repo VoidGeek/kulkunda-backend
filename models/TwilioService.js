@@ -1,7 +1,13 @@
 // TwilioService.js
-const accountSid = "ACbf95ba9ab0e99dc01a6ee5d579cb0e16";
-const authToken = "b170e3cbe589d4d17295f116d97d96fd";
-const verifySid = "VA5298db2e77a6a2a6283f077a5e6b929b";
+const dotenv = require("dotenv")
+const path = require("path");
+
+const envPath = path.resolve("server", "..", "config", "config.env");
+dotenv.config({ path: envPath });
+
+const accountSid = process.env.T_ACCOUNT_SID;
+const authToken = process.env.T_AUTH_TOKEN;
+const verifySid = process.env.T_VERIFY_SID;
 const client = require("twilio")(accountSid, authToken);
 
 class TwilioService {
